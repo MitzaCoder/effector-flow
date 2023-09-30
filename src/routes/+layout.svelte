@@ -2,4 +2,6 @@
 	import '../app.css'
 </script>
 
-<slot />
+<main class="px-4 py-6">
+	<slot />
+</main>
