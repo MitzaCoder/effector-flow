@@ -3,6 +3,7 @@
 	import { onMount } from 'svelte'
 	import Message from '$lib/components/Message.svelte'
 	import type { DisplayMessage, EffectorMessage } from '$lib/dictionary'
+	import Graph from '$lib/components/Graph.svelte'
 
 	let messages: EffectorMessage[] = []
 	let displayMessages: DisplayMessage[] = []
@@ -67,9 +68,6 @@
 						effectsRunning.set(messageParsed.stack.fxID, messageParsed)
 					}
 				}
-				if (shouldDisplay(messageParsed)) {
-					console.log(messageParsed)
-				}
 			} catch (e) {
 				messages = messages
 			}
@@ -94,6 +92,9 @@
 		'doneData',
 		'fail',
 		'failData',
+		'onEvent',
+		'onStore',
+		'onEffect',
 	]
 
 	function shouldDisplay(message: EffectorMessage): boolean {
@@ -108,20 +109,22 @@
 	Show derived
 	<input id="show-derived" type="checkbox" bind:checked={showDerived} />
 </label>
-<div class="flex flex-col">
-	<ul class="w-[400px] flex flex-col gap-y-1">
+<div class="flex flex-row gap-x-8">
+	<ul
+		class="w-[600px] h-[800px] p-6 border border-amber-500 rounded-2xl flex flex-col gap-y-1 overflow-y-auto"
+	>
 		{#each displayMessages as message}
 			{#if showDerived || !message.derived}
 				<Message {message} />
 			{/if}
 		{/each}
 		{#if messages.length === 0}
-			<div class="border-solid border border-amber-400 py-10">
+			<div class="border-solid rounded-2xl border border-amber-400 py-8">
 				<p class="text-center">Waiting for messages...</p>
 			</div>
 		{/if}
 	</ul>
-	<section />
+	<Graph {messages} />
 </div>
 
 <button
